@@ -100,12 +100,13 @@ class MenteeProfile(models.Model):
     def __str__(self):
         return f"Mentee Profile of {self.user.username}"
         
-def validate_dates(sender, **kwargs):
-    if sender.end_date and sender.end_date < sender.start_date:
+def validate_dates(sender, instance, **kwargs):
+    if instance.end_date and instance.end_date < instance.start_date:
         raise ValidationError("End date should be after start date.")
-      
+
 models.signals.pre_save.connect(validate_dates, sender=WorkExperience)
 models.signals.pre_save.connect(validate_dates, sender=Education)
+
 
 # Signal to create a profile instance whenever a CustomUser instance is created
 @receiver(post_save, sender=CustomUser)
