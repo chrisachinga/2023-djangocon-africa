@@ -46,3 +46,14 @@ class UserLogoutApi(APIView):
     def post(self, request):
         request.auth.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserProfileApi(APIView):
+    """
+    User Profile API View
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_serializer = UserSerializer(request.user)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
